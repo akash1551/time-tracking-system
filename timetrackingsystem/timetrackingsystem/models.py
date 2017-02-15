@@ -2,16 +2,16 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Employee(models.Model):
-    user=models.OneToOneField(User)
-    employee=models.CharField(max_length=10)
-    email=models.TextField()
-    mobile_no=models.CharField(max_length=10)
-    address=models.TextField(max_length=30)
-    position=models.CharField(max_length=20)
+    user = models.OneToOneField(User)
+    employee_name = models.CharField(max_length=10)
+    email = models.TextField()
+    mobile_no = models.CharField(max_length=10)
+    address = models.TextField(max_length=30)
+    position = models.CharField(max_length=20)
     team_name = models.ForeignKey('Team')
 
-    def __unicode__(self):
-        return str(self.employee)
+    def __str__(self):
+        return str(self.employee_name)
 
 
 class ShiftTime(models.Model):
@@ -19,15 +19,15 @@ class ShiftTime(models.Model):
     end_shift_time=models.DateTimeField(blank=True, null=True)
     date = models.DateTimeField(blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return (str(self.start_shift_time) + ' ' + str(self.end_shift_time))
 
 
 class Team(models.Model):
     Team_name = models.CharField(max_length=30)
-    
 
-    def __unicode__(self):
+
+    def __str__(self):
         return str(self.Team_name)
 
 
@@ -37,7 +37,7 @@ class AttendanceSheet(models.Model):
     ShiftTime = models.ForeignKey(ShiftTime)
 
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.date)
 
 
@@ -48,10 +48,10 @@ class Break(models.Model):
                  )
     attendance = models.ForeignKey(AttendanceSheet)
     break_time = models.DateTimeField(blank=True, null=True)
-    break_type = models.CharField(max_length=20,choices=BREAK_TYPE)
+    break_type = models.IntegerField(choices=BREAK_TYPE)
 
-    def __unicode__(self):
-        return str(self.break_type)
+    def __str__(self):
+        return str(self.attendance)
 
 
 
