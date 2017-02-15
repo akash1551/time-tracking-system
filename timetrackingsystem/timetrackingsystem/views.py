@@ -1,21 +1,43 @@
 import json,datetime
-from django.http import HttpResponse
 from .models import *
+from django.contrib.auth import login,authenticate
+from django.contrib.auth.models import User
+from django.http import HttpResponse
 
-def gettime_schedule(request):
+def add_employee(request):
     jsonobj = json.loads(request.body)
-    print jsonobj
 
-    start_time = jsonobj.get('start_time')
-    end_time = jsonobj.get('end_time')
+    address = jsonobj.get('address')
+    email = jsonobj.get('email')
+    mobile_no= jsonobj.get('mobile_no')
+    name =jsonobj.get('name')
+    password = jsonobj.get('password')
+    team_id = jsonobj.get('team_id')
+    position = jsonobj.get('position')
+    team_name = jsonobj.get('team_name')
+    user=jsonobj.get('user')
+    
+    
+    team = Team.objects.get(id=team_id)
+    team.save()
 
-    started_time=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(float(start_time))).timedelta()
-    ended_time=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(float(end_time)))
+     
 
-    get_time_diff = ended_time - started_time
-    print get_time_diff
+    user = User.objects.create(username=user)
+    user.set_password(password)
+    user.save()
+   
+    employee = Employee.objects.create(user=user,name=name,email=email,mobile_no=mobile_no,position=position,address=address,team_name=team)
+    employee.save()
 
-    time = Worktime_Record.objects.create(start_time=start_time ,end_time=end_time)
+    return HttpResponse(json.dumps({"validation":"employee added succesfully","status":True}), content_type="application/json")
+   
+def add_team(request):
+   jsonobj = json.loads(request.body)
 
-    time.save()
-    return HttpResponse(json.dumps({'validation':'get time difference is succesfully','status':True }))
+   team_name = jsonobj.get('team_name')
+
+   team=Team.objects.create(team_name=team_name)
+   team.save()
+
+   return HttpResponse(json.dumps({'validation':'team name updated successfully', "status": True}), content_type="application/json")

@@ -1,9 +1,11 @@
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import User
 
 class Employee(models.Model):
-    user=models.OneToOneField(User)
-    employee=models.CharField(max_length=10)
+    user=models.OneToOneField(User,null=True)
+    
+    name=models.CharField(max_length=10)
     email=models.TextField()
     mobile_no=models.CharField(max_length=10)
     address=models.TextField(max_length=30)
@@ -11,7 +13,7 @@ class Employee(models.Model):
     team_name = models.ForeignKey('Team')
 
     def __unicode__(self):
-        return str(self.employee)
+        return str(self.name)
 
 
 class ShiftTime(models.Model):
@@ -24,16 +26,16 @@ class ShiftTime(models.Model):
 
 
 class Team(models.Model):
-    Team_name = models.CharField(max_length=30)
+    team_name = models.CharField(max_length=30)
     
 
     def __unicode__(self):
-        return str(self.Team_name)
+        return str(self.team_name)
 
 
 class AttendanceSheet(models.Model):
     date = models.DateTimeField(blank=True, null=True)
-    employee = models.CharField(max_length=20)
+    employee = models.ForeignKey(Employee)
     ShiftTime = models.ForeignKey(ShiftTime)
 
 

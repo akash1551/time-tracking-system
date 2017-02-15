@@ -19,5 +19,9 @@ from .views import *
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^getshift/time/$', gettime_schedule),
+    url(r'^update/team/', add_team),
+    url(r'^update/employee/$', add_employee),
+    
+   
+   
 ]
