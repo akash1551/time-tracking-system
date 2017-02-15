@@ -19,7 +19,11 @@ from .views import *
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^update/team/', add_team),
+    url(r'^update/employee/$', add_employee),
     url(r'^add/shift/$', add_shift),
     url(r'^edit/employee/$', edit_employee),
     url(r'^start/break/time$', break_time),
+   
+   
 ]
