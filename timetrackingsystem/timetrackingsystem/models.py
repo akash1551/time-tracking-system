@@ -20,7 +20,7 @@ class ShiftTime(models.Model):
     start_shift_time=models.DateTimeField(blank=True, null=True)
     end_shift_time=models.DateTimeField(blank=True, null=True)
     date = models.DateTimeField(blank=True, null=True)
-
+    
     def __unicode__(self):
         return (str(self.start_shift_time) + ' ' + str(self.end_shift_time))
 
@@ -44,16 +44,13 @@ class AttendanceSheet(models.Model):
 
 
 class Break(models.Model):
-    BREAK_TYPE = (
-                    (1,'start_break'),
-                    (2,'end_break')
-                 )
+    start_break = models.DateTimeField(blank=True, null=True)
+    end_break = models.DateTimeField(blank=True, null=True)
     attendance = models.ForeignKey(AttendanceSheet)
-    break_time = models.DateTimeField(blank=True, null=True)
-    break_type = models.CharField(max_length=20,choices=BREAK_TYPE)
-
-    def __unicode__(self):
-        return str(self.break_type)
+    
+   
+    def __str__(self):
+        return str(self.attendance)
 
 
 

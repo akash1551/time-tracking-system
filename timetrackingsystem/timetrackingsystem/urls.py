@@ -21,7 +21,12 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^update/team/', add_team),
     url(r'^update/employee/$', add_employee),
-    
+    url(r'^add/shift/$', add_shift),
+    url(r'^edit/employee/$', edit_employee),
+    url(r'^start/break/$',start_break),
+    url(r'^end/break/$',end_break),
+    url(r'^calculate/break_time$', calculate_working_hours),
+
    
    
 ]
