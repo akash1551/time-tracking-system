@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class Employee(models.Model):
     user=models.OneToOneField(User,null=True)
-    
+
     name=models.CharField(max_length=10)
     email=models.TextField()
     mobile_no=models.CharField(max_length=10)
@@ -27,7 +27,7 @@ class ShiftTime(models.Model):
 
 class Team(models.Model):
     team_name = models.CharField(max_length=30)
-    
+
 
     def __unicode__(self):
         return str(self.team_name)
@@ -44,13 +44,11 @@ class AttendanceSheet(models.Model):
 
 
 class Break(models.Model):
-    BREAK_TYPE = (
-                    (1,'start_break'),
-                    (2,'end_break')
-                 )
+
     attendance = models.ForeignKey(AttendanceSheet)
-    break_time = models.DateTimeField(blank=True, null=True)
-    break_type = models.IntegerField(choices=BREAK_TYPE)
+
+    start_break = models.DateTimeField(blank=True, null=True)
+    end_break = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
         return str(self.attendance)
