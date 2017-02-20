@@ -1,9 +1,11 @@
 import json,datetime
+from datetime import timedelta
 from .models import *
 from django.contrib.auth import login,authenticate
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-import dateutil.relativedelta
+import dateutil.relativedelta 
+
 
 def add_employee(request):
     jsonobj = json.loads(request.body)
@@ -31,17 +33,16 @@ def add_employee(request):
     team = Team.objects.get(id=team_id)
     team.save()
 
-
-
+    
     user = User.objects.create(username=user)
     user.set_password(password)
     user.save()
-
+   
     employee = Employee.objects.create(user=user,name=name,email=email,mobile_no=mobile_no,position=position,address=address,team_name=team)
     employee.save()
 
     return HttpResponse(json.dumps({"validation":"employee added succesfully","status":True}), content_type="application/json")
-
+   
 def add_team(request):
     jsonobj = json.loads(request.body)
 
@@ -78,7 +79,6 @@ def add_shift(request):
 
 
     shift = ShiftTime.objects.create(start_shift_time=start_shift_converted_time, end_shift_time=end_time_converted_time, date=date_converted)
-
 
     shift.save()
     return HttpResponse(json.dumps({'validation':'added shift successfully', "status": True}), content_type="application/json")
@@ -125,59 +125,71 @@ def edit_employee(request):
 
 
 
-def break_time(request):
+def start_break(request):
     jsonobj = json.loads(request.body)
     print jsonobj
 
     attendance_id = jsonobj.get('attendance_id')
-    break_time = jsonobj.get('break_time')
-    break_type = jsonobj.get('break_type')
-
-
     attendance = AttendanceSheet.objects.get(id = attendance_id)
 
-    if not (count(attendance) % 2 == 0):
-        print "invalid data"
+    break_st=Break.objects.create(attendance=attendance,start_break= datetime.datetime.now())
 
-    final_break_time = datetime.datetime.fromtimestamp(float(break_time))
-
-
-
-    break_time =Break.objects.create(attendance=attendance,break_time=final_break_time,break_type=break_type)
-
-    break_time.save()
-
-    return HttpResponse(json.dumps({"validation":"break time added succesfully","status":True}))
+    break_st.save()
+    return HttpResponse(json.dumps({"validation":"start_break  succesfully","status":True}))
 
 
-
-def calculate_hours_per_day(request):
+def end_break(request):
     jsonobj = json.loads(request.body)
     print jsonobj
 
-    start_shift_time = jsonobj.get('start_shift_time')
-    end_shift_time = jsonobj.get('end_shift_time')
+    # attendance_id = jsonobj.get('attendance_id')
+    # attendance = AttendanceSheet.objects.get(id = attendance_id)
 
-    if((start_shift_time == None) or (end_shift_time == None)):
-        return HttpResponse(json.dumps({'validation':'you missed something', "status":False}), content_type="application/json")
+    break_id = jsonobj.get('break_id')
 
+     
+    break_ed=Break.objects.get(id=break_id)
+    break_ed.end_break = datetime.datetime.now()
 
-    start_shift_converted_time = datetime.datetime.fromtimestamp(float(start_shift_time))
-    end_time_converted_time = datetime.datetime.fromtimestamp(float(end_shift_time))
-
-    total_shift_time = dateutil.relativedelta.relativedelta (end_time_converted_time, start_shift_converted_time)
-    print total_shift_time
-
-
-    break_time = break_time.final_break_time
-
-    print break_time
-
-    working_time = (total_shift_time - break_time)
-
-    print working_time
+    break_ed.save()
+    return HttpResponse(json.dumps({"validation":"end_break  succesfully","status":True}))
 
 
-    return HttpResponse(json.dumps({"validation":"calculated total time succesfully","status":True}))
+def calculate_working_hours(request):
+    jsonobj = json.loads(request.body)
 
+    attendance_id = jsonobj.get('attendance_id')
+
+    attendance=AttendanceSheet.objects.get(id=attendance_id)
+    
+    breaks=Break.objects.filter(attendance=attendance)
+
+
+    #  calculating total break time in an attendance
+
+    total_breaktime = timedelta(days=0,hours=0,minutes=0,seconds=0)   
+    for _break in breaks:
+        duration = timedelta(days=_break.end_break.day,hours=_break.end_break.hour,minutes=_break.end_break.minute,seconds=_break.end_break.second) - timedelta(days=_break.start_break.day,hours=_break.start_break.hour,minutes=_break.start_break.minute,seconds=_break.start_break.second)
+        # print duration
+        total_breaktime+= duration
+    # print total_breaktime
+
+    # calculating shift hours time
+
+    shift_start=attendance.ShiftTime.start_shift_time
+    print shift_start
+    shift_end=attendance.ShiftTime.end_shift_time
+    print shift_end
+
+    shift_duration = timedelta(days=shift_end.day,hours=shift_end.hour,minutes=shift_end.minute,seconds=shift_end.second) - timedelta(days=shift_start.day,hours=shift_start.hour,minutes=shift_start.minute,seconds=shift_start.second)
+    print shift_duration 
+
+    # calculating total_working_time 
+
+    total_working_hours = shift_duration - total_breaktime
+    print total_working_hours
+
+
+
+    return HttpResponse(json.dumps({"validation":"calculate_break_time successfully","status":True}))
 
