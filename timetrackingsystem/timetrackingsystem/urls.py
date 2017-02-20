@@ -27,6 +27,8 @@ urlpatterns = [
     url(r'^end/break/$',end_break),
     url(r'^calculate/break_time$', calculate_working_hours),
     url(r'^registration/$',  registration_page),
+    url(r'^adding/shift/$',  shifttime_page),
+    url(r'^edditing/employee/$',  editemployee_page),
 
 
    

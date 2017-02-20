@@ -1,10 +1,11 @@
-import json,datetime
+import json,datetime,time
 from datetime import timedelta
 from .models import *
 from django.contrib.auth import login,authenticate
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
+
 
 
 def registration_page(request):
@@ -51,34 +52,46 @@ def add_team(request):
     return HttpResponse(json.dumps({'validation':'team name updated successfully', "status": True}), content_type="application/json")
 
 
+    
+def shifttime_page(request):
+    return render_to_response('html_templates/add_shift.html')
 
 def add_shift(request):
-    jsonobj = json.loads(request.body)
-    print jsonobj
+    # jsonobj = json.loads(request.body)
+    # print jsonobj
+
+    jsonobj = request.POST
 
     start_shift_time = jsonobj.get('start_shift_time')
     end_shift_time = jsonobj.get('end_shift_time')
     date = jsonobj.get('date')
 
 
-    start_shift_converted_time = datetime.datetime.fromtimestamp(float(start_shift_time))
-    end_time_converted_time = datetime.datetime.fromtimestamp(float(end_shift_time))
-    date_converted = datetime.datetime.fromtimestamp(float(date))
-    fmt = "%Y-%m-%d %H:%M:%S"
+    # start_shift_converted_time = datetime.datetime.fromtimestamp(float(start_shift_time))
+    # end_time_converted_time = datetime.datetime.fromtimestamp(float(end_shift_time))
+    # date_converted = datetime.datetime.fromtimestamp(float(date))
 
+    # fmt = "%Y-%m-%d %H:%M:%S"
+    print start_shift_time,end_shift_time,date
 
-    shift = ShiftTime.objects.create(start_shift_time=start_shift_converted_time, end_shift_time=end_time_converted_time, date=date_converted)
+    # shift = ShiftTime.objects.create(start_shift_time=start_shift_converted_time, end_shift_time=end_time_converted_time, date=date_converted)
+    shift = ShiftTime.objects.create(start_shift_time=start_shift_time, end_shift_time=end_shift_time, date=date)
 
     shift.save()
     return HttpResponse(json.dumps({'validation':'added shift successfully', "status": True}), content_type="application/json")
 
 
-def edit_employee(request):
-    jsonobj = json.loads(request.body)
-    print jsonobj
+def editemployee_page(request):
+    return render_to_response('html_templates/edit_employee.html')
 
-    employee_id = jsonobj.get('id')
-    team = jsonobj.get('team_id')
+def edit_employee(request):
+    # jsonobj = json.loads(request.body)
+    # print jsonobj
+
+    jsonobj = request.POST
+
+    employee_id = jsonobj.get('employee_id')
+    team_id= jsonobj.get('team_id')
     employee_name = jsonobj.get('emp_name')
     email = jsonobj.get('email')
     mob_no = jsonobj.get('mob_no')
@@ -88,7 +101,7 @@ def edit_employee(request):
 
     emp = Employee.objects.get(id = employee_id)
 
-    team_name = Team.objects.get(id = team)
+    team_name = Team.objects.get(id = team_id)
 
     emp.employee_name = employee_name
     emp.email = email
