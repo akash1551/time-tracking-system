@@ -37,7 +37,7 @@ class AttendanceSheet(models.Model):
     date = models.DateTimeField(blank=True, null=True)
     employee = models.ForeignKey(Employee)
     ShiftTime = models.ForeignKey(ShiftTime)
-
+    working_hours_time=models.DurationField(blank=True,null=True)
 
     def __unicode__(self):
         return str(self.date)

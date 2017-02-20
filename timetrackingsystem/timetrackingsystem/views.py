@@ -4,12 +4,16 @@ from .models import *
 from django.contrib.auth import login,authenticate
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-import dateutil.relativedelta 
+from django.shortcuts import render_to_response
 
+
+def registration_page(request):
+    return render_to_response('html_templates/index.html')
 
 def add_employee(request):
-    jsonobj = json.loads(request.body)
-
+    print request.body
+    print request.POST
+    jsonobj = request.POST
     address = jsonobj.get('address')
     email = jsonobj.get('email')
     mobile_no= jsonobj.get('mobile_no')
@@ -19,6 +23,8 @@ def add_employee(request):
     position = jsonobj.get('position')
     team_name = jsonobj.get('team_name')
     user=jsonobj.get('user')
+    
+    print address , name ,mobile_no,team_name,position,user,password,email
     
     
     team = Team.objects.get(id=team_id)
@@ -134,7 +140,12 @@ def calculate_working_hours(request):
 
     attendance=AttendanceSheet.objects.get(id=attendance_id)
     
-    breaks=Break.objects.filter(attendance=attendance)
+    breaks=Break.objects.filter(attendance=attendance).order_by('-start_break')
+   
+    if breaks.count > 0:
+        _break_ =breaks[0]
+        if (_break_.start_break and not _break_.end_break) or (not _break_.start_break and not _break_.end_break):
+            return HttpResponse(json.dumps({"validation":"please end your already started break","status":False}))
 
 
     #  calculating total break time in an attendance
@@ -161,7 +172,8 @@ def calculate_working_hours(request):
     total_working_hours = shift_duration - total_breaktime
     print total_working_hours
 
-
+    attendance.working_hours_time=total_working_hours
+    attendance.save()
 
     return HttpResponse(json.dumps({"validation":"calculate_break_time successfully","status":True}))
 
