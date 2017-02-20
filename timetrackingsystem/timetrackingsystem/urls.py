@@ -27,6 +27,4 @@ urlpatterns = [
     url(r'^end/break/$',end_break),
     url(r'^calculate/break_time$', calculate_working_hours),
 
-   
-   
 ]
