@@ -1,44 +1,47 @@
 
 <!DOCTYPE html>
 <html>
-	<head>
-		<title></title>
-	</head>
-	<body>
-		<form action="update/employee/" method="POST">
+<head>
+	<title></title>
+</head>
 
-			<fieldset>
-				<legend>ADD EMPLOYEE:</legend>
+<body style ="background-color:yellow">
+<center>
+<h2> Employee Registration </h2>
 
-				<label>Name:</label>
-				<input type = 'text' name="name" size = "10"> <br><br>
+<form action="/update/employee/" method="POST">
 
-				<label>Email:</label>
-				<input type = 'text' name="email" maxlenght = "30"> <br><br>
+    <label>name:</label>
+    <input type = 'text' name="name" size = "10"> </br> 
 
-				<label>Address:</label><br>
-				<textarea  name="address" cols="20" rows="5"> </textarea> <br><br>
+	<label>email:</label>
+	<input type = 'text' name="email" maxlenght = "30"> </br>
 
-				<label>Mobile_no:</label>
-				<input type = 'text' name="mobile_no" maxlength="10"> <br><br>
+	<label>Address:</label>
+	<textarea  name="address" cols="20" rows="5"> </textarea> </br>
 
-				<label>Position:</label>
-				<input type = 'text' name="position" maxlength="10"> <br><br>
+	<label>mobile_no:</label>
+	<input type = 'text' name="mobile_no" maxlength="10"> </br>
+	
+	<label>position:</label>
+	<input type = 'text' name="position" maxlength="10"> </br>
+	
+	<label>team_id:</label>
+	<input type = 'text' name="team_id" maxlength="10"> </br>
+	
+	<label>team_name:</label>
+	<input type = 'text' name="team_name" maxlength="10"> </br>
+	
+	<label>user_name:</label>
+	<input type = 'text' name="user" maxlength="10"> </br>
+	
+	<label>password:</label>
+	<input type = 'password' name="password" maxlenght = "7"> </br>
 
-				<label>Team id:</label>
-				<input type = 'text' name="team_id" maxlength="10"> <br><br>
-
-				<label>Team Name:</label>
-				<input type = 'text' name="team_name" maxlength="10"> <br><br>
-
-				<label>User Name:</label>
-				<input type = 'text' name="user" maxlength="10"> <br><br>
-
-				<label>Password:</label>
-				<input type = 'password' name="password" maxlenght = "8"> <br><br>
-
-				<button type='submit'>Sign Up</button><br>
-			</fieldset>
-		</form>
-	</body>
+	 
+	
+	<button type='submit'>Sign Up</button>  
+</form>
+</center>
+</body>
 </html>
