@@ -114,24 +114,34 @@ def edit_employee(request):
 
     return HttpResponse(json.dumps({'validation':'Employee updated successfully', "status": True}), content_type="application/json")
 
-
+def breaktime_page(request):
+    return render_to_response('html_templates/start_break.html')
 
 def start_break(request):
-    jsonobj = json.loads(request.body)
-    print jsonobj
 
-    attendance_id = jsonobj.get('attendance_id')
-    attendance = AttendanceSheet.objects.get(id = attendance_id)
+    jsonobj = request.POST
+    print request.POST
+
+    attendance_id  = request.POST.get('attendance_id')
+
+    # attendance_id = jsonobj.get('attedance_id')
+
+    attendance = AttendanceSheet.objects.get(id=attendance_id)
+
 
     break_st=Break.objects.create(attendance=attendance,start_break= datetime.datetime.now())
 
     break_st.save()
     return HttpResponse(json.dumps({"validation":"start_break  succesfully","status":True}))
 
+def endingbreak_page(request):
+    return render_to_response('html_templates/end_break.html') 
 
 def end_break(request):
-    jsonobj = json.loads(request.body)
-    print jsonobj
+    # jsonobj = json.loads(request.body)
+    # print jsonobj
+
+    jsonobj = request.POST
 
     # attendance_id = jsonobj.get('attendance_id')
     # attendance = AttendanceSheet.objects.get(id = attendance_id)
@@ -145,9 +155,12 @@ def end_break(request):
     break_ed.save()
     return HttpResponse(json.dumps({"validation":"end_break  succesfully","status":True}))
 
+def workinghours_page(request):
+    return render_to_response('html_templates/working_hours.html')
 
 def calculate_working_hours(request):
-    jsonobj = json.loads(request.body)
+    # jsonobj = json.loads(request.body)
+    jsonobj = request.POST
 
     attendance_id = jsonobj.get('attendance_id')
 
