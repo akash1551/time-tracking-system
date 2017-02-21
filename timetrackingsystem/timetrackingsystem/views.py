@@ -11,6 +11,9 @@ from django.shortcuts import render_to_response
 def registration_page(request):
     return render_to_response('html_templates/index.html')
 
+def team_add_page(request):
+    return render_to_response('html_templates/add_team.html')
+
 def add_employee(request):
     print request.body
     print request.POST
@@ -202,4 +205,19 @@ def calculate_working_hours(request):
     attendance.save()
 
     return HttpResponse(json.dumps({"validation":"calculate_break_time successfully","status":True}))
+
+
+
+def show_employee(request):
+
+    all_employees = Employee.objects.all()
+
+    employee_list = []
+
+    for emp in all_employees:
+        employee_list.append({"id":emp.id,"user":emp.user.username,"name":emp.name,"email":emp.email,"mobile no":emp.mobile_no,"address":emp.address,"position":emp.position,"team name":emp.team_name.team_name})
+
+    employee_dict = {}
+    employee_dict["employee_list"] = employee_list
+    return render_to_response('html_templates/show_emp.html',employee_dict)
 

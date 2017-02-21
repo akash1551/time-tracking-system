@@ -32,8 +32,8 @@ urlpatterns = [
     url(r'^started/Break/$', breaktime_page),
     url(r'^ended/Break/$', endingbreak_page),
     url(r'^working/hours/$', workinghours_page),
-
-
+    url(r'^add/team/$',team_add_page),
+    url(r'^show/employee/$',show_employee),
    
    
 ]
