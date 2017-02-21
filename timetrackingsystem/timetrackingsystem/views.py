@@ -4,12 +4,19 @@ from .models import *
 from django.contrib.auth import login,authenticate
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-import dateutil.relativedelta 
+from django.shortcuts import render_to_response
 
+
+def registration_page(request):
+    return render_to_response('html_templates/index.html')
+
+def team_add_page(request):
+    return render_to_response('html_templates/add_team.html')
 
 def add_employee(request):
-    jsonobj = json.loads(request.body)
-
+    print request.body
+    print request.POST
+    jsonobj = request.POST
     address = jsonobj.get('address')
     email = jsonobj.get('email')
     mobile_no= jsonobj.get('mobile_no')
@@ -20,36 +27,26 @@ def add_employee(request):
     team_name = jsonobj.get('team_name')
     user=jsonobj.get('user')
 
-    if name == None:
-        return HttpResponse(json.dumps({"validation":"name should not be blank","status":False}), content_type="application/json")
 
-    if((len(mobile_no) < 10) or (len(mobile_no) >10)):
-        return HttpResponse(json.dumps({'validation':'invalid number', "status":False}), content_type="application/json")
-
-
-    if len(password) < 8:
-        return HttpResponse(json.dumps({'validation':'please enter minimum 8 characters', "status":False}), content_type="application/json")
-
+    print address , name ,mobile_no,team_name,position,user,password,email
     team = Team.objects.get(id=team_id)
     team.save()
 
-    
+
     user = User.objects.create(username=user)
     user.set_password(password)
     user.save()
-   
+
     employee = Employee.objects.create(user=user,name=name,email=email,mobile_no=mobile_no,position=position,address=address,team_name=team)
     employee.save()
 
     return HttpResponse(json.dumps({"validation":"employee added succesfully","status":True}), content_type="application/json")
-   
+
 def add_team(request):
+
     jsonobj = json.loads(request.body)
 
     team_name = jsonobj.get('team_name')
-
-    if team_name == None:
-        return HttpResponse(json.dumps({'validation':'please enter team name', "status":False}), content_type="application/json")
 
 
     team=Team.objects.create(team_name=team_name)
@@ -66,11 +63,6 @@ def add_shift(request):
     start_shift_time = jsonobj.get('start_shift_time')
     end_shift_time = jsonobj.get('end_shift_time')
     date = jsonobj.get('date')
-
-    if((start_shift_time == None) or (end_shift_time == None)):
-        return HttpResponse(json.dumps({'validation':'you missed something', "status":False}), content_type="application/json")
-
-
 
     start_shift_converted_time = datetime.datetime.fromtimestamp(float(start_shift_time))
     end_time_converted_time = datetime.datetime.fromtimestamp(float(end_shift_time))
@@ -97,16 +89,6 @@ def edit_employee(request):
     position = jsonobj.get('position')
     team_name = jsonobj.get('team_name')
 
-    if employee_name == None:
-        return HttpResponse(json.dumps({"validation":"name should not be blank","status":False}), content_type="application/json")
-
-    if team_name == None:
-        return HttpResponse(json.dumps({'validation':'please enter team name', "status":False}), content_type="application/json")
-
-
-    if((len(mobile_no) < 10) or (len(mobile_no) >10)):
-        return HttpResponse(json.dumps({'validation':'invalid number', "status":False}), content_type="application/json")
-
 
     emp = Employee.objects.get(id = employee_id)
 
@@ -122,6 +104,21 @@ def edit_employee(request):
     emp.save()
 
     return HttpResponse(json.dumps({'validation':'Employee updated successfully', "status": True}), content_type="application/json")
+
+
+def show_employee(request):
+
+    all_employees = Employee.objects.all()
+
+    employee_list = []
+
+    for emp in all_employees:
+        employee_list.append({"id":emp.id,"user":emp.user.username,"name":emp.name,"email":emp.email,"mobile no":emp.mobile_no,"address":emp.address,"position":emp.position,"team name":emp.team_name.team_name})
+
+    employee_dict = {}
+    employee_dict["employee_list"] = employee_list
+    return render_to_response('html_templates/show_emp.html',employee_dict)
+
 
 
 
@@ -147,7 +144,7 @@ def end_break(request):
 
     break_id = jsonobj.get('break_id')
 
-     
+
     break_ed=Break.objects.get(id=break_id)
     break_ed.end_break = datetime.datetime.now()
 
@@ -161,13 +158,18 @@ def calculate_working_hours(request):
     attendance_id = jsonobj.get('attendance_id')
 
     attendance=AttendanceSheet.objects.get(id=attendance_id)
-    
-    breaks=Break.objects.filter(attendance=attendance)
+
+    breaks=Break.objects.filter(attendance=attendance).order_by('-start_break')
+
+    if breaks.count > 0:
+        _break_ =breaks[0]
+        if (_break_.start_break and not _break_.end_break) or (not _break_.start_break and not _break_.end_break):
+            return HttpResponse(json.dumps({"validation":"please end your already started break","status":False}))
 
 
     #  calculating total break time in an attendance
 
-    total_breaktime = timedelta(days=0,hours=0,minutes=0,seconds=0)   
+    total_breaktime = timedelta(days=0,hours=0,minutes=0,seconds=0)
     for _break in breaks:
         duration = timedelta(days=_break.end_break.day,hours=_break.end_break.hour,minutes=_break.end_break.minute,seconds=_break.end_break.second) - timedelta(days=_break.start_break.day,hours=_break.start_break.hour,minutes=_break.start_break.minute,seconds=_break.start_break.second)
         # print duration
@@ -182,14 +184,28 @@ def calculate_working_hours(request):
     print shift_end
 
     shift_duration = timedelta(days=shift_end.day,hours=shift_end.hour,minutes=shift_end.minute,seconds=shift_end.second) - timedelta(days=shift_start.day,hours=shift_start.hour,minutes=shift_start.minute,seconds=shift_start.second)
-    print shift_duration 
+    print shift_duration
 
-    # calculating total_working_time 
+    # calculating total_working_time
 
     total_working_hours = shift_duration - total_breaktime
     print total_working_hours
 
-
+    attendance.working_hours_time=total_working_hours
+    attendance.save()
 
     return HttpResponse(json.dumps({"validation":"calculate_break_time successfully","status":True}))
 
+
+
+def calculate_work_time(request):
+
+    all_employees = Employee.objects.all()
+
+    employee_list = []
+
+    for emp in all_employees:
+        employee_list.append({"id":emp.id,"user":emp.user.username,"name":emp.name,"email":emp.email,"mobile no":emp.mobile_no,"address":emp.address,"position":emp.position,"team name":emp.team_name.team_name})
+    employee_dict = {}
+    employee_dict["employee_list"] = employee_list
+    return render_to_response('html_templates/calculate.html',employee_dict)
