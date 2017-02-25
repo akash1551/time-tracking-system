@@ -38,6 +38,7 @@ def add_employee(request):
     print request.body
     print request.POST
     jsonobj = request.POST
+    
     address = jsonobj.get('address')
     email = jsonobj.get('email')
     mobile_no= jsonobj.get('mobile_no')
