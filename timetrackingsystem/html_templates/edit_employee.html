@@ -1,40 +1,204 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<h2>edit employee</h2>
+<!-- {% load static %} -->
+
+			<link rel="stylesheet" href="/static/bootstrap.min.css">
+			<link rel="stylesheet" type="text/css" href="/static/main.css">
+<title>EDIT EMPLOYEE</title>
+
+</head>
+
+
+<body>
+
+<div class='col-md-offset-5'>
+	<h2> Edit Employee </h2>
+</div>
+
+<form  action="/edit/employee/" method="POST">
+
+	<div class='container-fluid'>
+	<div class="row well well-sm">
+		<div class='col-md-offset-2'>
+
+
+		<div class='col-md-6'>
+				<label>Employee id:</label> </br>
+				<input type = 'text' name="employee_id" maxlength="10"> </br>
+
+				<label>Email:</label> </br>
+				<input type = 'email' name="email" size = "30"> </br>
+
+
+
+				<label>Address:</label> </br>
+				<textarea  name="address" cols="20" rows="5" ="5"> </textarea> </br>
+
+		</div>
+
+		<div class='col-md-6'>
+				<label>Team Name:</label></br>
+				<input type = 'text' name="team_name" maxlength="10"> </br>
+
+				<label>Name:</label> </br>
+				<input type = 'text' name="name" size = "30"> </br>
+
+
+
+
+				<label>Mobile No:</label> </br>
+				<input type = 'number' name="mobile_no" maxlength="10"> </br>
+
+
+
+				<label>Position:</label>  </br>
+				<input type = 'text' name="position" maxlength="10"> </br>
+
+
+
+				<label>Team id:</label>  </br>
+				<input type = 'text' name="team_id" maxlength="10"> </br>
+		</div>
+
+			<div class='col-md-offset-4'>
+				<button class="btn btn-success btn-lg " type='submit'>Save </button>
+			</div>
+
+		</div>
+	</div>
+
+</legend>
+</form>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="/static/bootstrap.min.js"></script>
+</body>
+
+</div>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+
+	<link href="/static/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+	<div class='col-md-offset-4'>
+		<h1>Edit Employee</h1>
+	</div>
+
 </head>
 <body>
-<fieldset>
-<center>
-<form action="/edit/employee/" method="POST">
 
-		<label>Name:</label>
-		<input type="test" name="emp_name"></br>
+<div class='container-fluid'>
+	<div class='row'>
+		<div class='col-md-offset-4'
+	<form action="/edit/employee/" method="POST">
+
+		<div class='col-md-4'>
+
+			<label>Employee_id:</label>
+			<div class="input-group">
+				<span class="input-group-addon" id="employee_id">@</span>
+				<input type="text" class="form-control" placeholder="Employee_id" aria-describedby="basic-addon1">
+			</div>
+
+
+			<label>NAME:</label>
+			<div class="input-group">
+				<span class="input-group-addon" id="emp_name">@</span>
+				<input type="text" class="form-control" placeholder="NAMES" aria-describedby="basic-addon1">
+			</div>
+
+
 
 		<label>Email:</label>
-		<input type="email" name="email"></br>
+			<div class="input-group">
+				<span class="input-group-addon" id="email">@</span>
+				<input type="text" class="form-control" placeholder="Email" aria-describedby="basic-addon1">
+			</div>
+
 
 		<label>Mobile_no:</label>
-		<input type="number" name=mob_no></br>
+			<div class="input-group">
+				<span class="input-group-addon" id="mob_no">@</span>
+				<input type="text" class="form-control" placeholder="Mobile_no" aria-describedby="basic-addon1">
+			</div>
 
-		<label>Employee_id:</label>
-		<input type="number" name="employee_id"></br>
 
-		<label>Address:</label>
-		<textarea  name="address" cols="15" rows="5"> </textarea> </br>
 
-		<label>Position:</label>
-		<input type="test" name="position"></br>
+			<label>Address:</label>
+				<div class="input-group">
+					<span class="input-group-addon" id="address">@</span>
+					<input type="text" class="form-control" placeholder="Address" aria-describedby="basic-addon1">
+				</div>
 
-		<label>Team:</label>
-		<input type="test" name="team_name"></br>	
+			<label>Position:</label>
+				<div class="input-group">
+					<span class="input-group-addon" id="position">@</span>
+					<input type="text" class="form-control" placeholder="Position" aria-describedby="basic-addon1">
+				</div>
 
-		<label>Team_id:</label>
-		<input type="test" name="team_id"></br>	
+			<label>Team:</label>
+				<div class="input-group">
+					<span class="input-group-addon" id="team_name">@</span>
+					<input type="text" class="form-control" placeholder="Team" aria-describedby="basic-addon1">
+				</div>
 
-		<button type='submit'>Submit</button>  
-</form>
-</center>
-</fieldset>
+			<label>Team_id:</label>
+				<div class="input-group">
+					<span class="input-group-addon" id="team_id">@</span>
+					<input type="text" class="form-control" placeholder="Team_id" aria-describedby="basic-addon1">
+				</div>
+
+				<div class='col-md-offset-4'>
+					<button type="submit" class="btn btn-primary btn-md">SAVE</button>
+
+					</div>
+
+				</div>
+			</div>
+
+
+			</form>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="/static/bootstrap.min.js"</script>
 </body>
 </html>
+
+
+
+
+
+
+ -->

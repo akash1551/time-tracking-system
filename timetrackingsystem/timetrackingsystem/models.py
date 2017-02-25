@@ -7,8 +7,8 @@ class Employee(models.Model):
 
     name=models.CharField(max_length=10)
     email=models.TextField()
-    mobile_no=models.CharField(max_length=10)
-    address=models.TextField(max_length=30)
+    mobile_no=models.CharField(max_length=10,null=True)
+    address=models.TextField(max_length=30,null=True)
     position=models.CharField(max_length=20)
     team_name = models.ForeignKey('Team')
 
