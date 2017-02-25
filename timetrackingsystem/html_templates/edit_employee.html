@@ -3,74 +3,70 @@
 <head>
 <!-- {% load static %} -->
 
-
-
-<link rel="stylesheet" href="/static/bootstrap.min.css">
-<title></title>
+			<link rel="stylesheet" href="/static/bootstrap.min.css">
+			<link rel="stylesheet" type="text/css" href="/static/main.css">
+<title>EDIT EMPLOYEE</title>
 
 </head>
 
-<body >
 
+<body>
 
-<h2> Edit Employee </h2>
+<div class='col-md-offset-5'>
+	<h2> Edit Employee </h2>
+</div>
 
 <form  action="/edit/employee/" method="POST">
-<legend>
+
+	<div class='container-fluid'>
+	<div class="row well well-sm">
+		<div class='col-md-offset-2'>
 
 
-<div class="container">
-<div class="rows">
-<div class="col-sm-6">
+		<div class='col-md-6'>
+				<label>Employee id:</label> </br>
+				<input type = 'text' name="employee_id" maxlength="10"> </br>
 
-	<label>employee_id:</label> </br>
-	<input type = 'text' name="employee_id" maxlength="10"> </br>
-
-		<label>email:</label> </br>
-		<input type = 'email' name="email" size = "30"> </br>
-</div>
-
-<div class="rows">
-
-<div class="col-sm-6">
-	<label>Address:</label> </br>
-	<textarea  name="address" cols="20" rows="5"> </textarea> </br>
-</div>
-
-<div class="col-sm-6">
-	<label>team_name:</label></br>
-	<input type = 'text' name="team_name" maxlength="10"> </br>
-</div>
-</div>
-
-<div class="rows">
-<div class="col-sm-6">
-	<label>name:</label> </br>
-	<input type = 'text' name="name" size = "30"> </br>
-
-</div>
+				<label>Email:</label> </br>
+				<input type = 'email' name="email" size = "30"> </br>
 
 
-<div class="col-sm-6">
-	<label>mobile_no:</label> </br>
-	<input type = 'number' name="mobile_no" maxlength="10"> </br>
-</div>
-</div>
 
-<div class="rows">
-<div class="col-sm-6">
-	<label>position:</label>  </br>
-	<input type = 'text' name="position" maxlength="10"> </br>
-</div>
+				<label>Address:</label> </br>
+				<textarea  name="address" cols="20" rows="5" ="5"> </textarea> </br>
 
-<div class="col-sm-6">
-	<label>team_id:</label>  </br>
-	<input type = 'text' name="team_id" maxlength="10"> </br>
-</div>
-</div>
+		</div>
+
+		<div class='col-md-6'>
+				<label>Team Name:</label></br>
+				<input type = 'text' name="team_name" maxlength="10"> </br>
+
+				<label>Name:</label> </br>
+				<input type = 'text' name="name" size = "30"> </br>
 
 
-	<button class="btn btn-success btn-md " type='submit'>Save </button>
+
+
+				<label>Mobile No:</label> </br>
+				<input type = 'number' name="mobile_no" maxlength="10"> </br>
+
+
+
+				<label>Position:</label>  </br>
+				<input type = 'text' name="position" maxlength="10"> </br>
+
+
+
+				<label>Team id:</label>  </br>
+				<input type = 'text' name="team_id" maxlength="10"> </br>
+		</div>
+
+			<div class='col-md-offset-4'>
+				<button class="btn btn-success btn-lg " type='submit'>Save </button>
+			</div>
+
+		</div>
+	</div>
 
 </legend>
 </form>
@@ -79,6 +75,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="/static/bootstrap.min.js"></script>
 </body>
+
+</div>
 </html>
 
 
@@ -197,6 +195,7 @@
 	<script src="/static/bootstrap.min.js"</script>
 </body>
 </html>
+
 
 
 
