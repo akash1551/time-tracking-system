@@ -28,12 +28,12 @@ urlpatterns = [
     url(r'^calculate/working_time$', calculate_working_hours),
     url(r'^registration/$',  registration_page),
     url(r'^adding/shift/$',  shifttime_page),
-    url(r'^edditing/employee/$',  editemployee_page),
+    url(r'^edit/employee/page/$',  edit_employee_page),
     url(r'^started/Break/$', breaktime_page),
-    url(r'^ended/Break/$', endingbreak_page),
-    url(r'^working/hours/$', workinghours_page),
+    url(r'^end/Break/page/$', end_break_page),
+    url(r'^working/hours/page/$', working_hours_page),
     url(r'^add/team/$',team_add_page),
     url(r'^show/employee/$',show_employee),
-   
-   
+
+
 ]
