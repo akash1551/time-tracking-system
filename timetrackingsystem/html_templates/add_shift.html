@@ -3,44 +3,58 @@
 <head>
 
 	<link rel="stylesheet" href="/static/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/main.css">
+
+	<link rel="stylesheet" type="text/css" href="/static/theme.css">
+
 	<title>Schedules for employees list for shifts</title>
 		
 </head>
 <body >
 <fieldset>
-<center>
+
+
 	<h2 style="background-color:orange"> shift timing</h2>
 	
+
 	<form action="/add/shift/" method="POST">
 
-	<div class="container">
+	<div class="container-fluid">
 		<div class="row">
-			<div class="col-sm-6">
+			<div class="col-sm-6  col-xs-6 bg-danger">
 
 				<label for="name">
  					 Start_Shift: <input type="datetime-local" id="name" name="start_shift_time">
 				</label>
 			</div>
 
-			<div class="col-sm-6">
+			<div class="col-sm-6 col-xs-6  bg-danger">
 				<label for="name">
 		 			 End_Shift: <input type="datetime-local" id="name" name="end_shift_time">
 				</label>
 			</div>
+
 		</div>
 
-		<div class="row">
-			<div class="col-sm-6">
+		<div class="row ">
+			<div class="col-sm-12 col-xs-6  bg-danger">
 				<label>Date</label>
 				<input type="date" name="date"></br>
 			</div>
+		</div>
 
-			<div class="col-sm-6">	
-				<div class="btn text-center">
+		<div class="row bg-danger">
+			<div class="col-sm-6 col-xs-6 ">	
+				<div class="btn center-block">
 					<button type='submit' class="btn btn-primary"> Send</button>  
 				</div>
 			</div>	
 		</div>
+
+		<div class="col-md-8 col-xs-8">
+				<img src="/static/image/s.png" class=" img-responsive img-circle">
+		</div>
+	</div>
 	</form>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script><script src="/static/bootstrap.min.js">></script>

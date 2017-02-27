@@ -66,7 +66,8 @@ def add_employee(request):
     return HttpResponse(json.dumps({"validation":"employee added succesfully","status":True}), content_type="application/json")
 
 def add_team(request):
-    jsonobj = json.loads(request.body)
+    # jsonobj = json.loads(request.body)
+    jsonobj = request.POST
 
     team_name = jsonobj.get('team_name')
 
