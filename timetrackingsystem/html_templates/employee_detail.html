@@ -3,37 +3,49 @@
 <head>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
-	<link rel="stylesheet" type="text/css" href="/static/main.css">
-
+	
 
 	<title>Welcome</title>
 </head>
-<body style="border-color: orange">
+<body >
 <form>
 <fieldset>
 
-		
-		<legend >Welcome to ContrailTech</legend>
-				<div class="container">
+		<center>
+		<legend style="background-color: yellow;" >Welcome to your personal account</legend></center>
+		<div class="container">
 			<div class="row">
-				<div class="col-sm-6">
+				<div class="col-sm-9">
 					<label>Date: 27/02/2017</label>
 					<!-- <input type="date" > -->
 				</div> 
 
-				<div class="col-sm-6">
-					<label>Name: sarika</label>
+				<div class="col-sm-3">
+					<label>Hello {{detail}}</label>
 					<!-- <input name="ABC" > -->
 				</div> 
 			</div>
 
 			<div class="row">
-				<div class="col-sm-6">
-					<label>ShiftTime: 09:00am to 18:00pm ( 8 hours)</label>
-				</div>
+				<div class="col-sm-9">
+					<label>Team:{{team}}</label>
+					<!-- <input name="ABC" > -->
+				</div> 
 
-				<div class="col-sm-6">
-				<label>Today breakTime: 1:00 pm to 2:00pm (1 hours)</label>
+
+				<div class="col-sm-3">
+					<label>Company: {{company}}</label>
+					<!-- <input name="ABC" > -->
+				</div> 
+			</div>
+
+			<div class="row">
+				<div class="col-xs-6 col-xs-offset-3">
+					<label>ShiftTime: {{shift_time}}</label>
+				</div>
+				
+				<div class="col-xs-6 col-xs-offset-3">
+					<label>Today breakTime: 1:00 pm to 2:00pm (1 hours)</label>
 					
 				</div>
 				
