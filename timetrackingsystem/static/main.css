@@ -1,3 +1,10 @@
 body {
 	background-color: #67b1ea
 }
+
+.bg cover{
+	background: url(/static/image/s.png);
+	height: 300px;
+	background-size: cover; 
+
+}

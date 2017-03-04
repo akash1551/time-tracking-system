@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+	
+
+	<title>Welcome</title>
+</head>
+<body >
+<form>
+<fieldset>
+
+		<center>
+		<legend style="background-color: yellow;" >Welcome to your personal account</legend></center>
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-9">
+					<label>Date: 27/02/2017</label>
+					<!-- <input type="date" > -->
+				</div> 
+
+				<div class="col-sm-3">
+					<label>Hello {{detail}}</label>
+					<!-- <input name="ABC" > -->
+				</div> 
+			</div>
+
+			<div class="row">
+				<div class="col-sm-9">
+					<label>Team:{{team}}</label>
+					<!-- <input name="ABC" > -->
+				</div> 
+
+
+				<div class="col-sm-3">
+					<label>Company: {{company}}</label>
+					<!-- <input name="ABC" > -->
+				</div> 
+			</div>
+
+			<div class="row">
+				<div class="col-xs-6 col-xs-offset-3">
+					<label>ShiftTime: {{shift_time}}</label>
+				</div>
+				
+				<div class="col-xs-6 col-xs-offset-3">
+					<label>Today breakTime: 1:00 pm to 2:00pm (1 hours)</label>
+					
+				</div>
+				
+
+			</div>
+		
+
+
+			<div class="row">
+   				 <div class="col-lg-6">
+    			    <div class="btn pull-left">
+        		    <button type="button" class="btn btn-primary">Break_Start</button>
+        		</div>
+    				
+
+				<div class="col-lg-6">
+    		    	<div class="btn pull-right">
+        			    <button type="button" class="btn btn-danger">Break_Stop</button>
+        			</div>
+    			</div>
+			</div>
+		</div>
+</fieldset>	
+</form>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">></script>
+</body>
+</html>

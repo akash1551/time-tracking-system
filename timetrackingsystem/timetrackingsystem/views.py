@@ -1,15 +1,17 @@
 import json,datetime,time
 from datetime import timedelta
 from .models import *
-from django.contrib.auth import login,authenticate
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response , render
+# from .forms import  EmployeeForm
 
+from django.contrib.auth import login as django_login
 
 
 def registration_page(request):
-    return render_to_response('html_templates/index.html')
+    return render_to_response('html_templates/emp_reg.html')
 
 def team_add_page(request):
     return render_to_response('html_templates/add_team.html')
@@ -29,6 +31,9 @@ def end_break_page(request):
 def working_hours_page(request):
     return render_to_response('html_templates/working_hours.html')
 
+def timetrackingsystem_page(request):
+    return render_to_response('html_templates/timetrackingsystem.html')
+
 
 
 
@@ -47,26 +52,92 @@ def add_employee(request):
     team_id = jsonobj.get('team_id')
     position = jsonobj.get('position')
     team_name = jsonobj.get('team_name')
+    company = jsonobj.get('company')
+    company_id = jsonobj.get('company_id')
     user=jsonobj.get('user')
 
-    print address , name ,mobile_no,team_name,position,user,password,email
+    # print address , name ,mobile_no,team_name,position,user,password,email
 
 
     team = Team.objects.get(id=team_id)
     team.save()
+
+    company = Company.objects.get(id=company_id)
+    company.save()
 
 
     user = User.objects.create(username=user)
     user.set_password(password)
     user.save()
 
-    employee = Employee.objects.create(user=user,name=name,email=email,mobile_no=mobile_no,position=position,address=address,team_name=team)
+    employee = Employee.objects.create(user=user,name=name,email=email,mobile_no=mobile_no,position=position,address=address,team_name=team,company=company)
     employee.save()
 
     return HttpResponse(json.dumps({"validation":"employee added succesfully","status":True}), content_type="application/json")
 
+def login_page(request):
+    return render_to_response("html_templates/login.html")
+
+def login(request):
+    # jsonobj=json.loads(request.body)
+    # print jsonobj
+
+    jsonobj = request.POST
+
+    user_name=jsonobj.get("user_name")
+    password=jsonobj.get("password")
+
+    if user_name == None:
+        return HttpResponse(json.dumps({'validation':'Enter user name' , "status": False}), content_type="application/json")
+    elif password == None:
+        return HttpResponse(json.dumps({'validation':'Enter password first' , "status": False}), content_type="application/json")
+
+    print user_name
+    user = authenticate(username=user_name,password=password)
+    
+
+    if not user:
+        return HttpResponse(json.dumps({'validation':'Invalid user', "status": False}), content_type="application/json")
+    if not user.is_active:
+        return HttpResponse(json.dumps({'validation':'The password is valid, but the account has been disabled!', "status":False}), content_type="application/json")
+
+    django_login(request,user)
+    # return HttpResponse(json.dumps({'validation':'Login successfully', "status": True}), content_type="application/json")
+    
+    emp_detail = Employee.objects.get(user=user)
+
+    # for emp_dict in emp_detail:
+    #     team = emp_dict.team_name
+    #     company =emp_dict.company
+    team=emp_detail.team_name
+    company=emp_detail.company
+
+    shift_time = AttendanceSheet.objects.filter(employee=emp_detail).order_by('-ShiftTime')
+
+    
+    if shift_time.count() > 0:
+        shift = shift_time[0]
+    else:
+        return HttpResponse(json.dumps({'validation':'your shift is not started!', "status":False}), content_type="application/json")
+      
+            
+
+        
+
+    queryset = {
+                "detail":user,
+                "team":team,
+                "company":company,
+                "shift_time":  shift
+            
+
+            }
+ 
+    return render_to_response('html_templates/employee_detail.html',queryset)
+
 def add_team(request):
-    jsonobj = json.loads(request.body)
+    # jsonobj = json.loads(request.body)
+    jsonobj = request.POST
 
     team_name = jsonobj.get('team_name')
 
@@ -74,6 +145,17 @@ def add_team(request):
     team.save()
 
     return HttpResponse(json.dumps({'validation':'team name updated successfully', "status": True}), content_type="application/json")
+
+def add_company(request):
+    # jsonobj = json.loads(request.body)
+    jsonobj = request.POST
+
+    company = jsonobj.get('company')
+
+    company=Company.objects.create(company=company)
+    company.save()
+
+    return HttpResponse(json.dumps({'validation':'company updated successfully', "status": True}), content_type="application/json")
 
 
 
@@ -111,16 +193,21 @@ def edit_employee(request):
 
     employee_id = jsonobj.get('employee_id')
     team_id= jsonobj.get('team_id')
+    company_id= jsonobj.get('company_id')
     employee_name = jsonobj.get('emp_name')
     email = jsonobj.get('email')
     mob_no = jsonobj.get('mob_no')
     address = jsonobj.get('address')
     position = jsonobj.get('position')
     team_name = jsonobj.get('team_name')
+    company = jsonobj.get('company')
+
 
     emp = Employee.objects.get(id = employee_id)
 
     team_name = Team.objects.get(id = team_id)
+
+    company = Team.objects.get(id = company_id)
 
     emp.employee_name = employee_name
     emp.email = email
@@ -128,6 +215,7 @@ def edit_employee(request):
     emp.address = address
     emp.position = position
     emp.team_name = team_name
+    emp.company = company
 
     emp.save()
 
@@ -180,6 +268,7 @@ def calculate_working_hours(request):
     attendance=AttendanceSheet.objects.get(id=attendance_id)
 
     breaks=Break.objects.filter(attendance=attendance).order_by('-start_break')
+    print breaks
 
     if breaks.count > 0:
         _break_ =breaks[0]

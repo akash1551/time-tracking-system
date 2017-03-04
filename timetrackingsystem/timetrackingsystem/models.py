@@ -11,6 +11,7 @@ class Employee(models.Model):
     address=models.TextField(max_length=30,null=True)
     position=models.CharField(max_length=20)
     team_name = models.ForeignKey('Team')
+    company = models.ForeignKey('Company')
 
     def __unicode__(self):
         return str(self.name)
@@ -31,6 +32,13 @@ class Team(models.Model):
 
     def __unicode__(self):
         return str(self.team_name)
+
+class Company(models.Model):
+    company = models.CharField(max_length=30)
+
+
+    def __unicode__(self):
+        return str(self.company)
 
 
 class AttendanceSheet(models.Model):
