@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
+		<link rel="stylesheet" href="/static/bootstrap.min.css">
 	
 
 	<title>Welcome</title>
 </head>
 <body >
-<form>
-<fieldset>
+
 
 		<center>
 		<legend style="background-color: yellow;" >Welcome to your personal account</legend></center>
-		<div class="container">
+		<div class="container ">
 			<div class="row">
 				<div class="col-sm-9">
-					<label>Date: 27/02/2017</label>
+					<label>Date: {{date}}</label>
 					<!-- <input type="date" > -->
 				</div> 
 
@@ -57,21 +55,23 @@
 			<div class="row">
    				 <div class="col-lg-6">
     			    <div class="btn pull-left">
-        		    <button type="button" class="btn btn-primary">Break_Start</button>
+        		    <button type="button" class="btn btn-primary" onclick="request_access({{  attendence_id }})" id="{{  attendence_id }}">Break_Start</button>
         		</div>
     				
 
 				<div class="col-lg-6">
     		    	<div class="btn pull-right">
-        			    <button type="button" class="btn btn-danger">Break_Stop</button>
+        			    <button type="button" class="btn btn-danger" onclick="request_accept({{attendence_id}})" id="{{attendence_id}}">Break_Stop</button>
         			</div>
     			</div>
 			</div>
 		</div>
-</fieldset>	
-</form>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="/static/bootstrap.min.js"></script>
+
+
+	<script src="/static/start_break.js"></script>
+	<script src="/static/end_break.js"></script>
 </body>
 </html>

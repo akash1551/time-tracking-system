@@ -1,5 +1,6 @@
 import json,datetime,time
 from datetime import timedelta
+from django.contrib import messages
 from .models import *
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
@@ -33,6 +34,52 @@ def working_hours_page(request):
 
 def timetrackingsystem_page(request):
     return render_to_response('html_templates/timetrackingsystem.html')
+
+def get_user_detail(user):
+    emp_detail = Employee.objects.get(user=user)
+    print emp_detail
+
+    # for emp_dict in emp_detail:
+    #     team = emp_dict.team_name
+    #     company =emp_dict.company
+    team=emp_detail.team_name
+    company=emp_detail.company
+
+    attendance = AttendanceSheet.objects.filter(employee=emp_detail).order_by('-ShiftTime')
+   
+    if attendance.count() > 0:
+        attendance = attendance[0]
+    else:
+        return HttpResponse(json.dumps({'validation':'your shift is not started!', "status":False}), content_type="application/json")
+        
+    now = datetime.datetime.now()
+    # print now
+
+    if attendance.date.year == now.year and attendance.date.month == now.month and attendance.date.day == now.day: 
+        date = attendance.date
+    else:
+        return HttpResponse(json.dumps({'validation':'your today entery are detected ! please enter its.', "status":False}), content_type="application/json")
+
+    try:
+        breaks = Break.objects.get(attendance=shift).order_by('-created')[0]
+        print breaks
+        break_id = breaks.id
+    except Exception as e:
+        break_id = None
+
+
+    queryset = {
+                "detail":user,
+                "team":team,
+                "company":company,
+                "shift_time": str(attendance.ShiftTime.start_shift_time) + " to "+str(attendance.ShiftTime.end_shift_time),
+                "date":attendance.date,
+                "attendence_id":attendance.id,
+                "break_id":break_id
+
+            }
+ 
+    return queryset
 
 
 
@@ -104,34 +151,7 @@ def login(request):
     django_login(request,user)
     # return HttpResponse(json.dumps({'validation':'Login successfully', "status": True}), content_type="application/json")
     
-    emp_detail = Employee.objects.get(user=user)
-
-    # for emp_dict in emp_detail:
-    #     team = emp_dict.team_name
-    #     company =emp_dict.company
-    team=emp_detail.team_name
-    company=emp_detail.company
-
-    shift_time = AttendanceSheet.objects.filter(employee=emp_detail).order_by('-ShiftTime')
-
-    
-    if shift_time.count() > 0:
-        shift = shift_time[0]
-    else:
-        return HttpResponse(json.dumps({'validation':'your shift is not started!', "status":False}), content_type="application/json")
-      
-            
-
-        
-
-    queryset = {
-                "detail":user,
-                "team":team,
-                "company":company,
-                "shift_time":  shift
-            
-
-            }
+    queryset = get_user_detail(user)
  
     return render_to_response('html_templates/employee_detail.html',queryset)
 
@@ -227,36 +247,63 @@ def start_break(request):
     jsonobj = request.POST
     print request.POST
 
+  
     attendance_id  = request.POST.get('attendance_id')
+    print attendance_id
 
     # attendance_id = jsonobj.get('attedance_id')
 
     attendance = AttendanceSheet.objects.get(id=attendance_id)
+    print attendance
 
+    breaks = Break.objects.filter(attendance=attendance, start_break__isnull=False,end_break__isnull=True).order_by('-start_break')
+    print breaks
 
-    break_st=Break.objects.create(attendance=attendance,start_break= datetime.datetime.now())
+    queryset = get_user_detail(request.user)
+    print queryset
+    
+    if not breaks.count() <= 0:
+        queryset['messages']="you have already start break! please end your break"
+    else:   
+        break_st=Break.objects.create(attendance=attendance,start_break= datetime.datetime.now())
+        break_st.save()
+    
+    return render_to_response("html_templates/employee_detail.html",queryset)
 
-    break_st.save()
-    return HttpResponse(json.dumps({"validation":"start_break  succesfully","status":True}))
 
 
 def end_break(request):
-    # jsonobj = json.loads(request.body)
+     # jsonobj = json.loads(request.body)
     # print jsonobj
 
-    jsonobj = request.POST
+    print request.POST
 
-    # attendance_id = jsonobj.get('attendance_id')
-    # attendance = AttendanceSheet.objects.get(id = attendance_id)
+    attendence_id = request.POST.get('attendence_id')
+    # print "attendence_id: ", attendence_id
 
-    break_id = jsonobj.get('break_id')
+    attendance = AttendanceSheet.objects.get(id=attendence_id)
+    # print attendance
 
+    breaks = Break.objects.filter(attendance=attendance)
+    
+    # break_id = jsonobj.get('break_id')
 
-    break_ed=Break.objects.get(id=break_id)
-    break_ed.end_break = datetime.datetime.now()
+    for _break_ in breaks:
+        
+        if not _break_.start_break is None:
+            break_end=Break.objects.create(attendance=attendance,end_break= datetime.datetime.now())
+            break_end.save()
+        else:
+            return HttpResponse(json.dumps({'validation':'please you before start your break', "status": True}), content_type="application/json")
 
-    break_ed.save()
-    return HttpResponse(json.dumps({"validation":"end_break  succesfully","status":True}))
+    queryset = get_user_detail(request.user)
+    return render_to_response("html_templates/employee_detail.html",queryset)
+
+    # break_ed=Break.objects.get(id=break_id)
+    # break_ed.end_break = datetime.datetime.now()
+
+    # break_ed.save()
+    # return render_to_response("html_templates/employee_detail.html",queryset)
 
 
 def calculate_working_hours(request):
